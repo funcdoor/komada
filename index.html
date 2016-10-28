@@ -1,33 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Komada by eslachance</title>
+    <meta name="description" content="Komada : Komada: Croatian for `pieces`, is a modular bot system including reloading modules and easy to use custom commands.">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Komada</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Komada</h1>
-        <p>Komada: Croatian for `pieces`, is a modular bot system including reloading modules and easy to use custom commands.</p>
 
-        <p class="view"><a href="https://github.com/eslachance/komada">View the Project on GitHub <small>eslachance/komada</small></a></p>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/eslachance/komada">View on GitHub</a>
 
+          <h1 id="project_title">Komada</h1>
+          <h2 id="project_tagline">Komada: Croatian for `pieces`, is a modular bot system including reloading modules and easy to use custom commands.</h2>
 
-        <ul>
-          <li><a href="https://github.com/eslachance/komada/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/eslachance/komada/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/eslachance/komada">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/eslachance/komada/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/eslachance/komada/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
 <a id="komada" class="anchor" href="#komada" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Komada</h1>
 
@@ -66,7 +69,7 @@
   <span class="pl-s"><span class="pl-pds">"</span>commandInhibitors<span class="pl-pds">"</span></span><span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>disable<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>permissions<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>missingBotPermissions<span class="pl-pds">"</span></span>],
   <span class="pl-s"><span class="pl-pds">"</span>dataHandlers<span class="pl-pds">"</span></span><span class="pl-k">:</span> [],
   <span class="pl-s"><span class="pl-pds">"</span>clientOptions<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    forceFetchUsers<span class="pl-k">:</span> <span class="pl-c1">true</span>
+    <span class="pl-s"><span class="pl-pds">"</span>fetchAllMembers<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>
   }
 });</pre></div>
 
@@ -79,13 +82,175 @@ node app.js
 <blockquote>
 <p>Requires Node 6 or higher (because discord.js requires that), also requires Discord.js v10 (currently #indev), installed automatically with <code>npm install</code>.</p>
 </blockquote>
+
+<h2>
+<a id="quick--dirty-reference-guide" class="anchor" href="#quick--dirty-reference-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick &amp; Dirty Reference Guide</h2>
+
+<blockquote>
+<p>For creating your own pieces</p>
+</blockquote>
+
+<p>Essentially, the way Komada works is that we have <em>core</em> pieces (functions, events, commands, etc) loaded automatically. 
+But you can add your own pieces easily by adding files to your <em>local</em> folders (which are created on first load)</p>
+
+<p>These pieces are: </p>
+
+<ul>
+<li>
+<strong>Commands</strong> which add in-chat functionality to your bot</li>
+<li>
+<strong>functions</strong> which can be used by other pieces or anywhere in the bot.</li>
+<li>
+<strong>dataHandlers</strong> which are database connectors (in progress at the moment)</li>
+</ul>
+
+<h3>
+<a id="creating-a-new-command" class="anchor" href="#creating-a-new-command" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating a new command</h3>
+
+<p>New commands are created in the <code>./commands/</code> folder, where subfolders are
+the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code>
+will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can
+also be created by adding a second folder level.</p>
+
+<blockquote>
+<p>If a command is present both in the <em>core</em> folders and your client folders, 
+your command will override the core one. This can let you modify the core
+behaviour. Note also that you cannot have more than one command with the same name.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">exports</span>.<span class="pl-en">run</span> <span class="pl-k">=</span> (<span class="pl-smi">client</span>, <span class="pl-smi">msg</span>. [<span class="pl-k">...</span><span class="pl-v">args</span>]) <span class="pl-k">=&gt;</span> {
+  <span class="pl-c">// Place Code Here</span>
+};
+
+<span class="pl-c1">exports</span>.<span class="pl-smi">conf</span> <span class="pl-k">=</span> {
+  enabled<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+  guildOnly<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+  aliases<span class="pl-k">:</span> [],
+  permLevel<span class="pl-k">:</span> <span class="pl-c1">0</span>,
+  botPerms<span class="pl-k">:</span> [],
+  requiredFuncs<span class="pl-k">:</span> []
+};
+
+<span class="pl-c1">exports</span>.<span class="pl-smi">help</span> <span class="pl-k">=</span> {
+  name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>,
+  description<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Command Description<span class="pl-pds">"</span></span>,
+  usage<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+  usageDelim<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+};</pre></div>
+
+<p><code>[...args]</code> represents a variable number of arguments give when the command is
+run. The name of the arguments in the array (and their count) is determined
+by the <code>usage</code> property and its given arguments.</p>
+
+<p><strong>Non-obvious options</strong>: </p>
+
+<ul>
+<li>
+<strong>enabled</strong>: Set to false to completely disable this command, it cannot be forecefully enabled.</li>
+<li>
+<strong>aliases</strong>: Array of aliases for the command, which will <em>also</em> trigger it.</li>
+<li>
+<strong>permLevel</strong>: Permission level, controlled via <code>./functions/permissionLevel.js</code>
+</li>
+<li>
+<strong>botPerms</strong>: An array of permission strings (such as <code>"MANAGE_MESSAGES"</code>) required for the command to run.</li>
+<li>
+<strong>requiredFuncs</strong>: An array of function names required for this command to execute (dependency)</li>
+<li>
+<strong>usage</strong>: The usage string as determined by the Argument Usage (see below)</li>
+</ul>
+
+<h4>
+<a id="command-arguments" class="anchor" href="#command-arguments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Command Arguments</h4>
+
+<p><strong>Usage Structure</strong></p>
+
+<p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument
+<code>&lt;Name:Type{min,max}&gt;</code></p>
+
+<ul>
+<li>
+<strong>Name</strong> Mostly used for debugging message, unless the type is Litteral in which it compares the argument to the name.</li>
+<li>
+<strong>Type</strong> The type of variable you are expecting</li>
+<li>
+<strong>Min, Max</strong> Minimum or Maximum for a giving variable (works on strings in terms of length, and on all types of numbers in terms of value) You are allowed to define any combination of min and max. Omit for none, <code>{min}</code> for min, <code>{,max}</code> for max.</li>
+<li>
+<strong>Special Repeat Tag</strong> <code>[...]</code> will repeat the last usage optionally until you run out of arguments. Useful for doing something like <code>&lt;SearchTerm:str&gt; [...]</code> which will allow you to take as many search terms as you want, per your Usage Deliminator.</li>
+</ul>
+
+<p><strong>Usage Types</strong></p>
+
+<ul>
+<li>
+<code>literal</code> : Literally equal to the Name. This is the default type if none is defined.</li>
+<li>
+<code>str</code>, <code>string</code> : Strings</li>
+<li>
+<code>int</code>, <code>integer</code> : Integers</li>
+<li>
+<code>num</code>, <code>number</code>, <code>Float</code> : Floating point numbers</li>
+<li>
+<code>url</code> : a url</li>
+<li>
+<code>msg</code>, <code>message</code> : A message object returned from the message id (now using fetchMessage as of d3d498c99d5eca98b5cbcefb9838fa7d96f17c93)</li>
+<li>
+<code>channel</code> : A channel object returned from the channel id or channel tag</li>
+<li>
+<code>guild</code> : A guild object returned from the guild id</li>
+<li>
+<code>user</code>, <code>mention</code> : A user object returned from the user id or mention</li>
+</ul>
+
+<h3>
+<a id="creating-an-event" class="anchor" href="#creating-an-event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating an event</h3>
+
+<p>Events are placed in <code>./events/</code> and their filename must be <code>eventName.js</code>.
+If a conflicting event is present in both the core and your client, <em>both</em> are
+loaded and will run when that event is triggered.</p>
+
+<p>Their structure is the following :</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">exports</span>.<span class="pl-en">run</span> <span class="pl-k">=</span> (<span class="pl-smi">client</span>, [<span class="pl-k">...</span><span class="pl-v">args</span>]) <span class="pl-k">=&gt;</span> {
+  <span class="pl-c">// event contents</span>
+};</pre></div>
+
+<p>Where <code>[...args]</code> is arguments you would <em>normally</em> get from those events.
+For example, while the <code>ready</code> event would only have <code>(client)</code>, the 
+<code>guildMemberAdd</code> event would be <code>(guild, member)</code>.</p>
+
+<h3>
+<a id="creating-a-function" class="anchor" href="#creating-a-function" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating a function</h3>
+
+<p>Functions are available throughout the system, from anywhere. Since they are the
+first thing loaded, every other piece can access them. Functions are loaded as
+core first, and if your code contains a function of the same name it overrides
+the core function.</p>
+
+<p>Their structure is somewhat freeform, in that they can contain a single function,
+or they may be a module composed of more than one functions as a module. It's
+not supposed to, but let's keep it between you and me, alright?</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">module</span>.<span class="pl-en">exports</span> <span class="pl-k">=</span> (<span class="pl-smi">str</span>) <span class="pl-k">=&gt;</span> {
+  <span class="pl-k">return</span> <span class="pl-smi">str</span>.<span class="pl-c1">replace</span>(<span class="pl-sr"><span class="pl-pds">/</span><span class="pl-c1">\w\S</span><span class="pl-k">*</span><span class="pl-pds">/</span>g</span>, <span class="pl-k">function</span>(<span class="pl-smi">txt</span>) {
+    <span class="pl-k">return</span> <span class="pl-smi">txt</span>.<span class="pl-c1">charAt</span>(<span class="pl-c1">0</span>).<span class="pl-c1">toUpperCase</span>() <span class="pl-k">+</span> <span class="pl-smi">txt</span>.<span class="pl-c1">substr</span>(<span class="pl-c1">1</span>).<span class="pl-c1">toLowerCase</span>();
+  });
+};</pre></div>
+
+<p>The arguments are arbitrary - just like a regular function. It may, or may not,
+return anything. Basically any functions. You know what I mean.</p>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/eslachance">eslachance</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Komada maintained by <a href="https://github.com/eslachance">eslachance</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+
     
+
   </body>
 </html>
